@@ -46,7 +46,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
 		}
 	}
 
-	const { customerId, amount, status } = validatedFields
+	const { customerId, amount, status } = validatedFields.data
 	const amountInCents = amount * 100
 
 	try {
@@ -78,15 +78,17 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
 		}
 	}
 
-	const { customerId, amount, status } = validatedFields
+	const { customerId, amount, status } = validatedFields.data
 	const amountInCents = amount * 100
 	try {
+		console.log(customerId, amountInCents, status, id, validatedFields)
 		await sql`
 		UPDATE invoices
 		SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
 		WHERE id = ${id}
   `
 	} catch (error) {
+		// console.log(error)
 		return {
 			message: "Database Error: Failed to Update Invoice.",
 		}
